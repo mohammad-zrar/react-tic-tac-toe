@@ -41,8 +41,9 @@ export default function App() {
           player: currentPlayer,
         },
       });
-      if (currentPlayer === "p1") setCurrentPlayer("p2");
-      else {
+      if (currentPlayer === "p1") {
+        setCurrentPlayer("p2");
+      } else {
         setCurrentPlayer("p1");
       }
     }
@@ -122,12 +123,26 @@ export default function App() {
             </tbody>
           </table>
 
-          <section className="flex justify-center  mt-8">
-            <div className="bg-blue-400 shadow-sm  py-2 px-4 rounded-tl-md rounded-bl-md">
-              <p className="text-lg text-blue-50">Player 1</p>
+          <section className="flex justify-center  mt-8 ">
+            <div
+              className={
+                "shadow-sm  py-2 px-4 rounded-tl-md rounded-bl-md " +
+                (currentPlayer === "p1"
+                  ? "bg-blue-400  text-blue-50"
+                  : "bg-blue-50  border-blue-200 text-blue-400")
+              }
+            >
+              <p className="text-lg">Player 1</p>
             </div>
-            <div className="bg-blue-50 shadow-sm border border-blue-200 py-2 px-4 rounded-tr-md rounded-br-md">
-              <p className="text-lg text-blue-400">Player 2</p>
+            <div
+              className={
+                " shadow-sm border py-2 px-4 rounded-tr-md rounded-br-md" +
+                (currentPlayer === "p2"
+                  ? " bg-blue-400 text-blue-50 "
+                  : " bg-blue-50  border-blue-200 text-blue-400")
+              }
+            >
+              <p className=" text-lg">Player 2</p>
             </div>
           </section>
         </div>
