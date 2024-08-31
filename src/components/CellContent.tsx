@@ -11,9 +11,9 @@ export default function CellContent({ cellData }: CellContentProps) {
   let content: ReactNode | null = null;
 
   if (cellData.checked) {
-    if (cellData.player === "p1") {
+    if (cellData.player === "x") {
       content = <Cross />;
-    } else if (cellData.player === "p2") {
+    } else if (cellData.player === "o") {
       content = <Nought />;
     }
   }

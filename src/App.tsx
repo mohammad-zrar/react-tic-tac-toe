@@ -14,7 +14,7 @@ export default function App() {
     [3, 5, 7],
   ] as const;
 
-  const [currentPlayer, setCurrentPlayer] = useState<"p1" | "p2">("p1");
+  const [currentPlayer, setCurrentPlayer] = useState<"x" | "o">("x");
 
   const [cells, setCells] = useState<Cells>({
     1: { checked: false, player: "" },
@@ -28,10 +28,25 @@ export default function App() {
     9: { checked: false, player: "" },
   });
 
-  const [player1FilledCells, setPlayer1FilledCelles] = useState<number[]>([]);
-  const [player2FilledCells, setPlayer2FilledCelles] = useState<number[]>([]);
+  const [xFilledCells, xFilledCelles] = useState<number[]>([]);
+  const [oFilledCells, oFilledCelles] = useState<number[]>([]);
+
+  const checkWin = (filledCells: number[]): boolean => {
+    return winnerCells.some((combination) =>
+      combination.every((cell) => filledCells.includes(cell))
+    );
+  };
 
   const checkCell = (cellNumber: number) => {
+    if (checkWin(xFilledCells)) {
+      alert("X player won!");
+      return;
+    }
+
+    if (checkWin(oFilledCells)) {
+      alert("O player won!");
+      return;
+    }
     if (!cells[cellNumber].checked) {
       setCells({
         ...cells,
@@ -41,10 +56,17 @@ export default function App() {
           player: currentPlayer,
         },
       });
-      if (currentPlayer === "p1") {
-        setCurrentPlayer("p2");
+
+      if (currentPlayer === "x") {
+        const updatedXFilledCells = [...xFilledCells, cellNumber];
+        xFilledCelles(updatedXFilledCells);
+
+        setCurrentPlayer("o");
       } else {
-        setCurrentPlayer("p1");
+        const updatedOFilledCells = [...oFilledCells, cellNumber];
+        oFilledCelles(updatedOFilledCells);
+
+        setCurrentPlayer("x");
       }
     }
   };
@@ -127,22 +149,22 @@ export default function App() {
             <div
               className={
                 "shadow-sm  py-2 px-4 rounded-tl-md rounded-bl-md " +
-                (currentPlayer === "p1"
+                (currentPlayer === "x"
                   ? "bg-blue-400  text-blue-50"
                   : "bg-blue-50  border-blue-200 text-blue-400")
               }
             >
-              <p className="text-lg">Player 1</p>
+              <p className="text-lg">X</p>
             </div>
             <div
               className={
                 " shadow-sm border py-2 px-4 rounded-tr-md rounded-br-md" +
-                (currentPlayer === "p2"
+                (currentPlayer === "o"
                   ? " bg-blue-400 text-blue-50 "
                   : " bg-blue-50  border-blue-200 text-blue-400")
               }
             >
-              <p className=" text-lg">Player 2</p>
+              <p className=" text-lg">O</p>
             </div>
           </section>
         </div>
