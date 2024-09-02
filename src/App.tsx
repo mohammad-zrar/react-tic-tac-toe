@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import CellContent from "./components/CellContent";
 import { Cells } from "./types";
+import BaseDialog from "./components/BaseDialog";
 
 export default function App() {
   const winnerCells: number[][] = [
@@ -14,7 +15,9 @@ export default function App() {
     [3, 5, 7],
   ] as const;
 
-  const [currentPlayer, setCurrentPlayer] = useState<"x" | "o">("x");
+  const [currentPlayer, setCurrentPlayer] = useState<"x" | "o" | "">("x");
+  const [gameEnded, setGameEnded] = useState(false);
+  const [showDialog, setShowDialog] = useState(false);
 
   const [cells, setCells] = useState<Cells>({
     1: { checked: false, player: "" },
@@ -38,7 +41,7 @@ export default function App() {
   };
 
   const checkCell = (cellNumber: number) => {
-    if (!cells[cellNumber].checked) {
+    if (!cells[cellNumber].checked && !gameEnded) {
       setCells({
         ...cells,
         [cellNumber]: {
@@ -50,27 +53,33 @@ export default function App() {
       if (currentPlayer === "x") {
         const updatedXFilledCells = [...xFilledCells, cellNumber];
         xFilledCelles(updatedXFilledCells);
-
-        setCurrentPlayer("o");
       } else {
         const updatedOFilledCells = [...oFilledCells, cellNumber];
         oFilledCelles(updatedOFilledCells);
-
-        setCurrentPlayer("x");
       }
     }
   };
 
+  const handleCloseDialog = () => {
+    setShowDialog(false);
+  };
+
   useEffect(() => {
     if (checkWin(oFilledCells)) {
-      console.log("O player won!");
+      setGameEnded(true);
+      setShowDialog(true);
+    } else {
+      setCurrentPlayer("x");
     }
     return () => {};
   }, [oFilledCells]);
 
   useEffect(() => {
     if (checkWin(xFilledCells)) {
-      console.log("X player won!");
+      setGameEnded(true);
+      setShowDialog(true);
+    } else {
+      setCurrentPlayer("o");
     }
     return () => {};
   }, [xFilledCells]);
@@ -172,6 +181,14 @@ export default function App() {
             </div>
           </section>
         </div>
+
+        {gameEnded && (
+          <BaseDialog
+            show={showDialog}
+            winner={currentPlayer}
+            closeDialog={handleCloseDialog}
+          />
+        )}
       </main>
     </div>
   );

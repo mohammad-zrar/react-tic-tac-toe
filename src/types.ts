@@ -6,3 +6,5 @@ export type Cell = {
 export type Cells = {
   [key: number]: Cell;
 };
+
+export type CurrentPlayer = "o" | "x" | "";
