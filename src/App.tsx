@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import CellContent from "./components/CellContent";
 import { Cells } from "./types";
 
@@ -38,19 +38,9 @@ export default function App() {
   };
 
   const checkCell = (cellNumber: number) => {
-    if (checkWin(xFilledCells)) {
-      alert("X player won!");
-      return;
-    }
-
-    if (checkWin(oFilledCells)) {
-      alert("O player won!");
-      return;
-    }
     if (!cells[cellNumber].checked) {
       setCells({
         ...cells,
-
         [cellNumber]: {
           checked: true,
           player: currentPlayer,
@@ -70,6 +60,20 @@ export default function App() {
       }
     }
   };
+
+  useEffect(() => {
+    if (checkWin(oFilledCells)) {
+      console.log("O player won!");
+    }
+    return () => {};
+  }, [oFilledCells]);
+
+  useEffect(() => {
+    if (checkWin(xFilledCells)) {
+      console.log("X player won!");
+    }
+    return () => {};
+  }, [xFilledCells]);
 
   return (
     <div>
