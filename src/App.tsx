@@ -16,7 +16,9 @@ export default function App() {
   const [xFilledCells, setXFilledCells] = useState<number[]>([]);
   const [oFilledCells, setOFilledCells] = useState<number[]>([]);
 
-  // functions's
+  const [xWins, setXWins] = useState(0);
+  const [oWins, setOWins] = useState(0);
+
   const checkWin = (filledCells: number[]): boolean => {
     return WINNER_CELLS.some((combination) =>
       combination.every((cell) => filledCells.includes(cell))
@@ -56,11 +58,11 @@ export default function App() {
     setShowDialog(false);
   };
 
-  // useEffect's
   useEffect(() => {
     if (checkWin(oFilledCells)) {
       setIsEnd(true);
       setShowDialog(true);
+      setOWins(oWins + 1);
     } else {
       setCurrentPlayer("x");
     }
@@ -71,6 +73,7 @@ export default function App() {
     if (checkWin(xFilledCells)) {
       setIsEnd(true);
       setShowDialog(true);
+      setXWins(xWins + 1);
     } else {
       setCurrentPlayer("o");
     }
@@ -175,9 +178,9 @@ export default function App() {
           </section>
 
           <section id="" className="flex justify-around  mt-8">
-            <div className="text-blue-800 text-xl">5</div>
+            <div className="text-blue-800 text-xl">{xWins}</div>
             <BaseButton onClick={rematch} disabled={!isEnd}></BaseButton>
-            <div className="text-blue-800 text-xl">4</div>
+            <div className="text-blue-800 text-xl">{oWins}</div>
           </section>
         </div>
 
