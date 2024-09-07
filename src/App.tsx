@@ -2,46 +2,29 @@ import { useState, useEffect } from "react";
 import CellContent from "./components/CellContent";
 import { Cells } from "./types";
 import BaseDialog from "./components/BaseDialog";
+import BaseButton from "./components/BaseButton";
+import { WINNER_CELLS } from "./constants";
+import { CELLS } from "./constants";
 
 export default function App() {
-  const winnerCells: number[][] = [
-    [1, 2, 3],
-    [4, 5, 6],
-    [7, 8, 9],
-    [1, 4, 7],
-    [2, 5, 8],
-    [3, 6, 9],
-    [1, 5, 9],
-    [3, 5, 7],
-  ] as const;
-
   const [currentPlayer, setCurrentPlayer] = useState<"x" | "o" | "">("x");
-  const [gameEnded, setGameEnded] = useState(false);
+  const [isEnd, setIsEnd] = useState(false);
   const [showDialog, setShowDialog] = useState(false);
 
-  const [cells, setCells] = useState<Cells>({
-    1: { checked: false, player: "" },
-    2: { checked: false, player: "" },
-    3: { checked: false, player: "" },
-    4: { checked: false, player: "" },
-    5: { checked: false, player: "" },
-    6: { checked: false, player: "" },
-    7: { checked: false, player: "" },
-    8: { checked: false, player: "" },
-    9: { checked: false, player: "" },
-  });
+  const [cells, setCells] = useState<Cells>(CELLS);
 
-  const [xFilledCells, xFilledCelles] = useState<number[]>([]);
-  const [oFilledCells, oFilledCelles] = useState<number[]>([]);
+  const [xFilledCells, setXFilledCells] = useState<number[]>([]);
+  const [oFilledCells, setOFilledCells] = useState<number[]>([]);
 
+  // functions's
   const checkWin = (filledCells: number[]): boolean => {
-    return winnerCells.some((combination) =>
+    return WINNER_CELLS.some((combination) =>
       combination.every((cell) => filledCells.includes(cell))
     );
   };
 
   const checkCell = (cellNumber: number) => {
-    if (!cells[cellNumber].checked && !gameEnded) {
+    if (!cells[cellNumber].checked && !isEnd) {
       setCells({
         ...cells,
         [cellNumber]: {
@@ -52,21 +35,31 @@ export default function App() {
 
       if (currentPlayer === "x") {
         const updatedXFilledCells = [...xFilledCells, cellNumber];
-        xFilledCelles(updatedXFilledCells);
+        setXFilledCells(updatedXFilledCells);
       } else {
         const updatedOFilledCells = [...oFilledCells, cellNumber];
-        oFilledCelles(updatedOFilledCells);
+        setOFilledCells(updatedOFilledCells);
       }
     }
+  };
+
+  const rematch = () => {
+    setXFilledCells([]);
+    setOFilledCells([]);
+
+    setCells(CELLS);
+
+    setIsEnd(false);
   };
 
   const handleCloseDialog = () => {
     setShowDialog(false);
   };
 
+  // useEffect's
   useEffect(() => {
     if (checkWin(oFilledCells)) {
-      setGameEnded(true);
+      setIsEnd(true);
       setShowDialog(true);
     } else {
       setCurrentPlayer("x");
@@ -76,7 +69,7 @@ export default function App() {
 
   useEffect(() => {
     if (checkWin(xFilledCells)) {
-      setGameEnded(true);
+      setIsEnd(true);
       setShowDialog(true);
     } else {
       setCurrentPlayer("o");
@@ -180,9 +173,15 @@ export default function App() {
               <p className=" text-lg">O</p>
             </div>
           </section>
+
+          <section id="" className="flex justify-around  mt-8">
+            <div className="text-blue-800 text-xl">5</div>
+            <BaseButton onClick={rematch} disabled={!isEnd}></BaseButton>
+            <div className="text-blue-800 text-xl">4</div>
+          </section>
         </div>
 
-        {gameEnded && (
+        {isEnd && (
           <BaseDialog
             show={showDialog}
             winner={currentPlayer}
