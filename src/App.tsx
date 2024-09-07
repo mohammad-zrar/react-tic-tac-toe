@@ -88,7 +88,7 @@ export default function App() {
         </h1>
       </header>
       <main>
-        <div className="w-1/3 bg-gray-50   mx-auto p-8 my-8 shadow-md rounded-md">
+        <div className="w-3/4 md:w-1/2 lg:w-1/3 bg-gray-50   mx-auto p-8 my-8 shadow-md rounded-md">
           <table className="mx-auto border border-gray-300">
             <tbody className="cursor-pointer">
               <tr className="border border-gray-300">
