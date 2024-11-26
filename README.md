@@ -1,4 +1,4 @@
-[Visit Live Project]([https://www.genome.gov/](https://react-tic-tac-toe-five-tau.vercel.app/))
+[Visit Live Project]([https://www.genome.gov/](https://react-tic-tac-toe-five-tau.vercel.app/)
 
 # React + TypeScript + Vite
 
